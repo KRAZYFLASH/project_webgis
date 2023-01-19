@@ -6,10 +6,10 @@ class Home extends BaseController
 {
     public function index()
     {
-        return view('dashboard/fileutama');
+        return view('admin/fitur/fileInti/dashboardUtama');
     }
     public function index2()
     {
-        return view('default');
+        return view('admin/layout/default');
     }
 }

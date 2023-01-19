@@ -25,7 +25,7 @@ $routes->set404Override();
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
 // Set `$autoRoutesImproved` to true in `app/Config/Feature.php` and set the following to true.
-// $routes->setAutoRoute(false);
+$routes->setAutoRoute(true);
 
 /*
  * --------------------------------------------------------------------
@@ -35,8 +35,22 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->get('/dashboard', 'admin\Dashboard::index');
 $routes->get('/siuu', 'Home::index2');
+
+$routes->get('/dataKebun', 'admin\DataKebun::index');
+$routes->get('/createDataKebun', 'admin\DataKebun::create');
+$routes->post('/storeDataKebun', 'admin\DataKebun::store');
+$routes->delete('/deleteKebun/(:num)', 'admin\DataKebun::delete/$1');
+
+$routes->get('/dataCabang', 'admin\DataCabang::index');
+$routes->get('/createDataCabang', 'admin\DataCabang::create');
+$routes->post('/storeDataCabang', 'admin\DataCabang::store');
+$routes->delete('/deleteCabang/(:num)', 'admin\DataCabang::delete/$1');
+$routes->get('/ambilDataKebun/(:num)', 'admin\DataKebun::ambilDataKebun/$1');
+
+$routes->get('/tampilDataCabang/(:num)', 'admin\Maps::tampilDataCabang/$1');
+$routes->get('/maps', 'admin\Maps::index');
 
 /*
  * --------------------------------------------------------------------
