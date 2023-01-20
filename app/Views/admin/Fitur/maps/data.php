@@ -35,26 +35,7 @@
                         <div id="vmap" style="height: 250px; width: 100%;"></div>
                     </div>
                     <!-- /.card-body-->
-                    <div class="card-footer bg-transparent">
-                        <div class="row">
-                            <div class="col-4 text-center">
-                                <div id="sparkline-1"></div>
-                                <div class="text-white">Visitors</div>
-                            </div>
-                            <!-- ./col -->
-                            <div class="col-4 text-center">
-                                <div id="sparkline-2"></div>
-                                <div class="text-white">Online</div>
-                            </div>
-                            <!-- ./col -->
-                            <div class="col-4 text-center">
-                                <div id="sparkline-3"></div>
-                                <div class="text-white">Sales</div>
-                            </div>
-                            <!-- ./col -->
-                        </div>
-                        <!-- /.row -->
-                    </div>
+
                 </div>
             </div>
             <div class="col-6 offset-1">

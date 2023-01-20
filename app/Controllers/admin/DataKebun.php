@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\DataKebunModel;
 use App\Models\DataCabangModel;
+use App\Models\DataSenaModel;
 
 class DataKebun extends BaseController
 {
@@ -12,19 +13,30 @@ class DataKebun extends BaseController
     {
         $this->dataKebunModel = new DataKebunModel();
         $this->dataCabangModel = new DataCabangModel();
+        $this->dataSenaModel = new DataSenaModel();
     }
 
     public function index()
     {
-        $query = $this->dataKebunModel->query("select st_x(st_astext(st_GeometryN(st_centroid(geom),1))) ,st_y(st_astext(st_GeometryN(st_centroid(geom),1))) from data_kebun");
-        $geo = $query->getResult();
+        // $query = $this->dataKebunModel->query("select st_x(st_astext(st_GeometryN(st_centroid(geom),1))) ,st_y(st_astext(st_GeometryN(st_centroid(geom),1))) from data_kebun");
+        // $geo = $query->getResult();
 
-        // dd($geo);
-        // dd($geo);
+        $dataKebun = array();
 
+        $ambilNamaData = $this->dataCabangModel->findAll();
+
+        for ($i=0; $i < count($ambilNamaData); $i++) { 
+            array_push($dataKebun , strtolower($ambilNamaData[$i]->nama_cabang_kebun));
+        } // ['sena','tapi']
+
+
+        $data = $this->dataSenaModel;
         
+        $query = $data->query("select * from data_sena 
+                            union select * from data_tapi");
+    
 
-        $query2 = $this->dataKebunModel->query("with tmp1 as (
+        $query2 = $this->dataCabangModel->query("with tmp1 as (
             select 'Feature' as \"type\",
                 ST_AsGeoJSON(t.geom,6)::json as \"geometry\",
                 (
@@ -142,5 +154,36 @@ class DataKebun extends BaseController
         ];
         
         return view('/admin/fitur/maps/data', $_data);
+    }
+
+    public function tampilDataKebun($id)
+    {
+        $ambil_data = $this->dataCabangModel->find($id)->nama_cabang_kebun;
+
+        $siuu = strtolower($ambil_data);
+
+        // dd($siuu);
+
+
+        $data = $this->dataCabangModel;
+
+        // $hasilData = $data->select('*')
+        //             ->join('data_"'.$siuu.'"', 'data_cabang_kebun.nama_cabang_kebun = data_"'.$siuu.'".kebun ')
+        //             ->get();
+
+        // $datas = $data->select('*')
+        //             ->join('data_sena', 'data_cabang_kebun.nama_cabang_kebun = data_sena.kebun')
+        //             ->get();
+
+        $query = $data->query("select * from data_cabang_kebun
+        join data_".$siuu."
+        on data_cabang_kebun.nama_cabang_kebun = data_".$siuu.".kebun;");
+    
+        // dd($dataj);
+        
+        $_data = [
+            'data' => $query->getResult()
+        ];
+        return view('admin/fitur/dataKebun/dataKebun', $_data);
     }
 }

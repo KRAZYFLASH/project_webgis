@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class DataTapiModel extends Model
+class DataSenaModel extends Model
 {
-    protected $table            = 'data_tapi';
+    protected $table            = 'data_sena';
     protected $primaryKey       = 'gid';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
@@ -18,4 +18,11 @@ class DataTapiModel extends Model
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
+
+    // function getAll(){
+    //     $builder = $this->db->table('data_sena')->select('*');
+    //     $builder->union('data_tapi', '*');
+    //     $siuu = $builder->get();
+    //     return $siuu->getResult();
+    // }
 }

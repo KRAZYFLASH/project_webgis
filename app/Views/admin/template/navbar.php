@@ -6,7 +6,7 @@
         data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any
         other icon font library -->
-        <li class="nav-item">
+        <li class="nav-item active">
             <a href="<?= site_url('/dashboard') ?>" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
@@ -25,7 +25,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="<?= site_url('/dataKebun') ?>" class=" nav-link"="nav-link"">
+                    <a href="<?= site_url('/dataKebun') ?>" class=" nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Data Kebun</p>
                     </a>

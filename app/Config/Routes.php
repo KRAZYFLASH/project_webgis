@@ -42,6 +42,7 @@ $routes->get('/dataKebun', 'admin\DataKebun::index');
 $routes->get('/createDataKebun', 'admin\DataKebun::create');
 $routes->post('/storeDataKebun', 'admin\DataKebun::store');
 $routes->delete('/deleteKebun/(:num)', 'admin\DataKebun::delete/$1');
+$routes->get('/tampilDataKebun/(:num)', 'admin\DataKebun::tampilDataKebun/$1');
 
 $routes->get('/dataCabang', 'admin\DataCabang::index');
 $routes->get('/createDataCabang', 'admin\DataCabang::create');

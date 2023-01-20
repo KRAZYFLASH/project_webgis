@@ -28,7 +28,7 @@
                                         <input type="hidden" name="_method" value="DELETE" />
                                         <button type="submit" class="btn btn-danger" style="margin-right: 5px;"><i class="fa fa-trash"></i></button>
                                     </form>
-                                    <a class="btn btn-primary" href="#"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-primary" href="<?= site_url('tampilDataKebun/'.$value->id_cabang_kebun) ?>"><i class="fa fa-eye"></i></a>
                                 </div>
                             </td>
                         </tr>
