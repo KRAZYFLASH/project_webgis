@@ -22,6 +22,7 @@ class DataKebun extends BaseController
         // $geo = $query->getResult();
 
         $dataKebun = array();
+        $kumpulQuery = array();
 
         $ambilNamaData = $this->dataCabangModel->findAll();
 
@@ -31,42 +32,51 @@ class DataKebun extends BaseController
 
 
         $data = $this->dataSenaModel;
-        
-        $query = $data->query("select * from data_sena 
-                            union select * from data_tapi");
+
+        $potongan1 = "select * from data_".$dataKebun[0]."";
+
+        for ($i=1; $i < count($dataKebun); $i++) { 
+            array_push($kumpulQuery , " union select * from data_".$dataKebun[$i]." ");
+        }
+
+        for ($i=0; $i < count($dataKebun); $i++) { 
+            $query2 = $this->dataCabangModel->query("with tmp1 as (
+                select 'Feature' as \"type\",
+                    ST_AsGeoJSON(t.geom,6)::json as \"geometry\",
+                    (
+                        select json_strip_nulls(row_to_json(t))
+                        from(
+                            SELECT gid, fid_1, kebun, afdeling, blok, blok_sap, komoditi, tahuntanam, luas_ha, total_poko, pokok_per_, varietas, ST_AsGeoJSON(ST_GeomFromText('MULTIPOLYGON(((103.135341 -3.613098,103.135412 -3.613872,103.135412 -3.614501,103.13394 -3.614501,103.13395 -3.614443,103.13399 -3.614299,103.13395 -3.614239,103.133963 -3.61407,103.134135 -3.613946,103.134304 -3.613745,103.134665 -3.613474,103.135091 -3.612928,103.135341 -3.613098)))'))
+                        ) t
+                    ) as \"properties\"
+                from public.data_".$dataKebun[$i]." t
+            ), tmp2 as (
+                    select 'FeatureCollection' as \"type\",
+                        array_to_json(array_agg(t)) as \"features\"
+                    from tmp1 t
+            
+            )	select row_to_json(t)
+            from tmp2 t;");
     
+            // dd($query2);
+    
+            $geo2 = $query2->getResult();
+    
+            $isi = $geo2[0]->row_to_json;
+    
+            $file = fopen("source_geojson/".$dataKebun[$i].".geojson", "w");
+            fwrite($file, $isi);
+            fclose($file);
+        }
 
-        $query2 = $this->dataCabangModel->query("with tmp1 as (
-            select 'Feature' as \"type\",
-                ST_AsGeoJSON(t.geom,6)::json as \"geometry\",
-                (
-                    select json_strip_nulls(row_to_json(t))
-                    from(
-                        SELECT gid, layer, fid_1, kebun, afdeling, blok, blok_sap, komoditi, tahuntanam, luas_ha, total_poko, pokok_per_, varietas, ST_AsGeoJSON(ST_GeomFromText('MULTIPOLYGON(((103.135341 -3.613098,103.135412 -3.613872,103.135412 -3.614501,103.13394 -3.614501,103.13395 -3.614443,103.13399 -3.614299,103.13395 -3.614239,103.133963 -3.61407,103.134135 -3.613946,103.134304 -3.613745,103.134665 -3.613474,103.135091 -3.612928,103.135341 -3.613098)))'))
-                    ) t
-                ) as \"properties\"
-            from public.data_kebun t
-        ), tmp2 as (
-                select 'FeatureCollection' as \"type\",
-                    array_to_json(array_agg(t)) as \"features\"
-                from tmp1 t
+        $fileName2_potongan = implode('', $kumpulQuery);
+
+        $hasilAkhir = $potongan1.''.$fileName2_potongan;
         
-        )	select row_to_json(t)
-        from tmp2 t;");
-
-        // dd($query2);
-
-        $geo2 = $query2->getResult();
-
-        $isi = $geo2[0]->row_to_json;
-
-        $file = fopen("source_geojson/kamu.geojson", "w");
-        fwrite($file, $isi);
-        fclose($file);
-
+        $query = $data->query($hasilAkhir);
 
         $data = [
-            'data' => $this->dataKebunModel->findAll()
+            'data' => $query->getResult()
         ];
 
         return view('admin/fitur/dataKebun/dataKebun', $data);
@@ -111,12 +121,35 @@ class DataKebun extends BaseController
         return redirect()->to('/dataKebun');
     }
 
-    public function ambilDataKebun($id)
+    public function ambilDataKebun($gid,$kebun)
     {
-
         $this->dataCabangModel = new DataCabangModel();
 
         $model = $this->dataKebunModel;
+
+        $dataKebun = array();
+        $kumpulQuery = array();
+
+        $ambilNamaData = $this->dataCabangModel->findAll();
+
+        for ($i=0; $i < count($ambilNamaData); $i++) { 
+            array_push($dataKebun , strtolower($ambilNamaData[$i]->nama_cabang_kebun));
+        } // ['sena','tapi']
+
+
+        $data = $this->dataSenaModel;
+
+        $potongan1 = "select * from data_".$dataKebun[0]."";
+
+        for ($i=1; $i < count($dataKebun); $i++) { 
+            array_push($kumpulQuery , " union select * from data_".$dataKebun[$i]." ");
+        }
+
+        $fileName2_potongan = implode('', $kumpulQuery);
+
+        $hasilAkhir = $potongan1.''.$fileName2_potongan;
+        
+        $query = $data->query($hasilAkhir)->getResult();
 
 
 		$file = file_get_contents("./source_geojson/kamu.geojson");
@@ -130,7 +163,7 @@ class DataKebun extends BaseController
         foreach ($features as $index => $feature) {
             $kode_kebun = $feature->properties->blok_sap;
             $dataz = $model->where('blok_sap', $kode_kebun)
-            ->where('kebun', 'SENA')
+            ->where('kebun', $kebun)
             ->first();
         
             if($dataz)
@@ -139,17 +172,17 @@ class DataKebun extends BaseController
             }
         }
 
-        $nilaiMax = $model->select('MAX(total_poko) AS total_poko')->where('kebun', 'SENA')->first()->total_poko;
+        $nilaiMax = $model->select('MAX(total_poko) AS total_poko')->where('kebun', $kebun)->first()->total_poko;
 
-        $data = $this->dataKebunModel->find($id);
-        $data2 = $data->fid_1;
+        // $data = $this->dataKebunModel->find(1);
+        $data2 = $this->dataSenaModel->query("select * from (".$hasilAkhir.") as kante where gid = ".$gid."")->getResult();
 
         // dd($data2);
         
         $_data = [
-            'data' => $data,
+            'data' => $data2,
             'dataz' => $features,
-            'data2' => $data2,
+            'data2' => $data2[0]->fid_1,
             'nilaiMax' => $nilaiMax
         ];
         
@@ -179,8 +212,6 @@ class DataKebun extends BaseController
         join data_".$siuu."
         on data_cabang_kebun.nama_cabang_kebun = data_".$siuu.".kebun;");
     
-        // dd($dataj);
-        
         $_data = [
             'data' => $query->getResult()
         ];

@@ -63,23 +63,23 @@
                             <tbody id="tbody">
                                 <tr>
                                     <td>kebun</td>
-                                    <td><?= $data->kebun ?></td>
+                                    <td><?= $data[0]->kebun ?></td>
                                 </tr>
                                 <tr>
                                     <td>Blok</td>
-                                    <td><?= $data->blok_sap ?></td>
+                                    <td><?= $data[0]->blok_sap ?></td>
                                 </tr>
                                 <tr>
                                     <td>Komoditi</td>
-                                    <td><?= $data->komoditi ?></td>
+                                    <td><?= $data[0]->komoditi ?></td>
                                 </tr>
                                 <tr>
                                     <td>Luas</td>
-                                    <td><?= $data->luas_ha ?></td>
+                                    <td><?= $data[0]->luas_ha ?></td>
                                 </tr>
                                 <tr>
                                     <td>Total Pohon</td>
-                                    <td><?= $data->total_poko ?></td>
+                                    <td><?= $data[0]->total_poko ?></td>
                                 </tr>
                             </tbody>
                         </table>

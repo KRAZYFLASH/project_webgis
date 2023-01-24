@@ -48,7 +48,7 @@ $routes->get('/dataCabang', 'admin\DataCabang::index');
 $routes->get('/createDataCabang', 'admin\DataCabang::create');
 $routes->post('/storeDataCabang', 'admin\DataCabang::store');
 $routes->delete('/deleteCabang/(:num)', 'admin\DataCabang::delete/$1');
-$routes->get('/ambilDataKebun/(:num)', 'admin\DataKebun::ambilDataKebun/$1');
+$routes->get('/ambilDataKebun/(:any)/(:any)', 'admin\DataKebun::ambilDataKebun/$1/$2');
 
 $routes->get('/tampilDataCabang/(:num)', 'admin\Maps::tampilDataCabang/$1');
 $routes->get('/maps', 'admin\Maps::index');
