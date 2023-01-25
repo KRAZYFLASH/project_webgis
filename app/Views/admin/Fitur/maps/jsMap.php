@@ -40,10 +40,13 @@
             attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
         }).addTo(map);
 
-        var geojson = L.geoJson(data, {
-        style : style,
-        onEachFeature : onEachFeature
-    }).addTo(map);
+        for (let index = 0; index < data.length; index++) {
+            var geojson = L.geoJson(data[index], {
+                style : style,
+                onEachFeature : onEachFeature
+            }).addTo(map);
+        }
+
 
     function highlightFeature(e) {
         var layer = e.target;

@@ -39,6 +39,9 @@ class DataKebun extends BaseController
             array_push($kumpulQuery , " union select * from data_".$dataKebun[$i]." ");
         }
 
+        $file3 = fopen("source_geojson/semua.geojson", "w");
+        fwrite($file3, '');
+
         for ($i=0; $i < count($dataKebun); $i++) { 
             $query2 = $this->dataCabangModel->query("with tmp1 as (
                 select 'Feature' as \"type\",
@@ -46,7 +49,7 @@ class DataKebun extends BaseController
                     (
                         select json_strip_nulls(row_to_json(t))
                         from(
-                            SELECT gid, fid_1, kebun, afdeling, blok, blok_sap, komoditi, tahuntanam, luas_ha, total_poko, pokok_per_, varietas, ST_AsGeoJSON(ST_GeomFromText('MULTIPOLYGON(((103.135341 -3.613098,103.135412 -3.613872,103.135412 -3.614501,103.13394 -3.614501,103.13395 -3.614443,103.13399 -3.614299,103.13395 -3.614239,103.133963 -3.61407,103.134135 -3.613946,103.134304 -3.613745,103.134665 -3.613474,103.135091 -3.612928,103.135341 -3.613098)))'))
+                            SELECT gid, fid_1, kebun, afdeling, blok, blok_sap, komoditi, tahuntanam, luas_ha, total_poko, pokok_per_, varietas, ST_AsText(geom)
                         ) t
                     ) as \"properties\"
                 from public.data_".$dataKebun[$i]." t
@@ -67,7 +70,12 @@ class DataKebun extends BaseController
             $file = fopen("source_geojson/".$dataKebun[$i].".geojson", "w");
             fwrite($file, $isi);
             fclose($file);
+
+            $file2 = fopen("source_geojson/semua.geojson", "a+");
+            fwrite($file2, $isi);
+            fclose($file2);
         }
+        fclose($file3);
 
         $fileName2_potongan = implode('', $kumpulQuery);
 
@@ -136,7 +144,6 @@ class DataKebun extends BaseController
             array_push($dataKebun , strtolower($ambilNamaData[$i]->nama_cabang_kebun));
         } // ['sena','tapi']
 
-
         $data = $this->dataSenaModel;
 
         $potongan1 = "select * from data_".$dataKebun[0]."";
@@ -152,7 +159,7 @@ class DataKebun extends BaseController
         $query = $data->query($hasilAkhir)->getResult();
 
 
-		$file = file_get_contents("./source_geojson/kamu.geojson");
+		$file = file_get_contents("./source_geojson/".$kebun.".geojson");
 		$file = json_decode($file);
 
         // $file = file_get_contents("./source_geojson/SenaKaretAtas_OSS.json");
@@ -195,7 +202,7 @@ class DataKebun extends BaseController
 
         $siuu = strtolower($ambil_data);
 
-        // dd($siuu);
+        // dd($ambil_data);
 
 
         $data = $this->dataCabangModel;
@@ -213,7 +220,8 @@ class DataKebun extends BaseController
         on data_cabang_kebun.nama_cabang_kebun = data_".$siuu.".kebun;");
     
         $_data = [
-            'data' => $query->getResult()
+            'data' => $query->getResult(),
+            'dataKebun' => $ambil_data
         ];
         return view('admin/fitur/dataKebun/dataKebun', $_data);
     }

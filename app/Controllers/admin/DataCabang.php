@@ -45,4 +45,17 @@ class DataCabang extends BaseController
         
         return redirect()->to('/dataCabang');
     }
+
+    public function exportData($id)
+    {
+        $arr = array();
+        
+        $kebun = strtolower($id);
+
+        $file = file_get_contents("./source_geojson/".$kebun.".geojson");
+        $file = json_decode($file);
+
+        header('Content-Type: application/geojson');
+        header("Content-Disposition: attachment; filename= ".$kebun.".geojson");
+    }
 }

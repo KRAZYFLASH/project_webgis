@@ -3,7 +3,7 @@
 <?= $this->section('dataKebun') ?>
 <div class="containerAdmin">
 <div>
-    <a href="/createDataKebun" type="button" class="btn btn-success m-4"><i class="fa fa-plus"></i> Tambah Data</a>
+    <a href="<?= site_url('exportDataGeojson/'.$dataKebun) ?>" type="button" class="btn btn-success m-4"><i class="fa fa-download"></i> | Download Geojson</a>
 </div>
     <div class="card">
         <!-- /.card-header -->
@@ -41,11 +41,6 @@
                             <td><?= $value->pokok_per_?></td>
                             <td>
                                 <div class="d-flex align-items-start">
-                                    <a class="btn btn-warning" href="#" style="margin-right: 5px;"><i class="fa fa-edit"></i></a>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="_method" value="DELETE" />
-                                        <button type="submit" class="btn btn-danger" style="margin-right: 5px;"><i class="fa fa-trash"></i></button>
-                                    </form>
                                     <a class="btn btn-primary" href="<?= site_url('ambilDataKebun/'.$value->gid.'/'.$value->kebun) ?>"><i class="fa fa-eye"></i></a>
                                 </div>
                             </td>

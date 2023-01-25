@@ -49,6 +49,7 @@ $routes->get('/createDataCabang', 'admin\DataCabang::create');
 $routes->post('/storeDataCabang', 'admin\DataCabang::store');
 $routes->delete('/deleteCabang/(:num)', 'admin\DataCabang::delete/$1');
 $routes->get('/ambilDataKebun/(:any)/(:any)', 'admin\DataKebun::ambilDataKebun/$1/$2');
+$routes->get('/exportDataGeojson/(:any)', 'admin\DataCabang::exportData/$1');
 
 $routes->get('/tampilDataCabang/(:num)', 'admin\Maps::tampilDataCabang/$1');
 $routes->get('/maps', 'admin\Maps::index');

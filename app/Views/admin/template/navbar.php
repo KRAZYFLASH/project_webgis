@@ -6,9 +6,9 @@
         data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any
         other icon font library -->
-        <li class="nav-item active">
-            <a href="<?= site_url('/dashboard') ?>" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
+        <li class="nav-item">
+            <a href="<?= site_url('/maps') ?>" class="nav-link">
+                <i class="nav-icon far fa-image"></i>
                 <p>
                     Dashboard
                 </p>
@@ -37,14 +37,6 @@
                     </a>
                 </li>
             </ul>
-        </li>
-        <li class="nav-item">
-            <a href="<?= site_url('/maps') ?>" class="nav-link">
-                <i class="nav-icon far fa-image"></i>
-                <p>
-                    Maps
-                </p>
-            </a>
         </li>
     </ul>
 </nav>
